@@ -6,7 +6,10 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     let url = AVAILABLE_URL;
     let data = handle_request(msg.page, msg.cmd);
     let response = data.response;
-    httpPOSTAsync(url, data.json, () => { });
+    if (response === "OK")
+        httpPOSTAsync(url, data.json, () => { });
+    else
+        alert(`JSON ERROR ${data.json}\t ${response}`, );
     sendResponse({data : response});
 });
 
