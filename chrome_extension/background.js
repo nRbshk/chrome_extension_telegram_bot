@@ -39,7 +39,6 @@ function sendMessage_to_Content(cmd, tab){
     chrome.tabs.sendMessage(tab.id, {page: SITES_DICT[site_name], cmd: cmd}, (resp) => {
         console.log(resp);
     });
-    console.log("QWEQ");
 }
 
 chrome.contextMenus.create({
