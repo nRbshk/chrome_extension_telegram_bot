@@ -2,38 +2,15 @@ const CONTEXT_MENU_ID_ADD = "CONTEXT_MENU_ID_ADD";
 const CONTEXT_MENU_ID_SET_EPISODE = "CONTEXT_MENU_ID_SET_EPISODE";
 const AVAILABLE_SITES = ['naruto-base.su', 'sovetromantica.com'];
 const SITES_DICT = {'naruto-base.su' : 'nb', 'sovetromantica.com' : 'sv'};
+const TABS_TO_COMMANDS = {CONTEXT_MENU_ID_ADD : "/secret_add", CONTEXT_MENU_ID_SET_EPISODE: "/secret_set_episode"};
 
-
-function check_availability_site_name(site_name){
-    for (let index = 0; index < AVAILABLE_SITES.length; index++) {
-        if (site_name == AVAILABLE_SITES[index])
-            return true
-    }
-    return false
-};
-
-
-function CM_clicked(info,tab){
-    
-    if (CONTEXT_MENU_ID_ADD == info.menuItemId) {
-        sendMessage_to_Content("/secret_add", tab);
-    }
-    else if (CONTEXT_MENU_ID_SET_EPISODE == info.menuItemId) {
-        sendMessage_to_Content("/secret_set_episode", tab);
-    } 
-    else 
-        return null
-
-    
-}
 
 function sendMessage_to_Content(cmd, tab){
     let url = tab.url;
 
-    site_name = url.split("/")[2];
+    const site_name = url.split("/")[2];
 
-    site_availability = check_availability_site_name(site_name);
-    if (!site_availability)
+    if (!AVAILABLE_SITES.includes(site_name))
         return null
 
     chrome.tabs.sendMessage(tab.id, {page: SITES_DICT[site_name], cmd: cmd}, (resp) => {
@@ -52,4 +29,4 @@ chrome.contextMenus.create({
     id: CONTEXT_MENU_ID_SET_EPISODE
 });
 
-chrome.contextMenus.onClicked.addListener(CM_clicked);
+chrome.contextMenus.onClicked.addListener((info, tab) => sendMessage_to_Content(TABS_TO_COMMANDS[info.menuItemId], tab));
