@@ -1,0 +1,23 @@
+{
+    "name": "Anime telegram",
+    "manifest_version": 3,
+    "version": "0.1",
+    "description": "Add anime to your list",
+    "permissions": [
+      "contextMenus",
+      "tabs",
+      "activeTab"
+    ],
+    "background": {
+        "default_icon": "icon.png", 
+        "service_worker": "background.js"
+    },
+    "content_scripts": [{
+        "matches": ["*://sovetromantica.com/*", "*://naruto-base.su/*"],
+        "js": ["content.js"]
+      }],
+    "icons": {
+        "16" : "icon.png"
+    }
+  }
+  
